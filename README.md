@@ -52,7 +52,7 @@ Server runs on `http://localhost:3000`
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/fullstack-user-management.git
+git clone https://github.com/botirov206/split.git
 cd fullstack-user-management
 ```
 
