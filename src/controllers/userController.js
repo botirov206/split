@@ -7,6 +7,13 @@ exports.register = (req, res) => {
       .status(400)
       .json({ message: "Please fill all required fields!" });
   }
+
+  // Email validation regex
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: "Please provide a valid email address" });
+  }
+
   const user = userService.register(username, email, password);
   return res.status(201).json({ user, message: "Successfully created!" });
 };

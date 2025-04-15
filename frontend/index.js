@@ -44,26 +44,46 @@ for (let i = 0; i < labels.length; i++) {
 
 let obj = {};
 
-function handleSubmit(event) {
-//   event.preventDefault();
+async function handleSubmit(event) {
+  // event.preventDefault();
+  
+  // Collect form data (keeping the existing implementation)
   const inputs = document.querySelectorAll("input");
   inputs.forEach((input) => {
     obj[input.name] = input.value;
   });
+
+  // Validate inputs
   if (obj.username === "" || obj.email === "" || obj.password === "") {
     alert("Username, password and email are required!");
+    return;
   }
-  fetch("http://localhost:3000/api/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(obj),
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => console.log(data));
+
+  try {
+    const response = await fetch("http://localhost:3000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || 'Registration failed');
+      return;
+    }
+
+    // Show success message
+    alert(data.message || 'Registration successful');
+    // Clear the form
+    inputs.forEach(input => input.value = '');
+    obj = {};
+    
+  } catch (error) {
+    alert('An error occurred during registration');
+  }
 }
 
 const submitButton = document.createElement("button");
@@ -90,8 +110,14 @@ function getAllUsers() {
 getAllUsers();
 
 const table = document.createElement("table");
-table.style.border = "1px solid black";
-table.style.borderCollapse = "collapse";
+style(table, {
+  borderCollapse: "collapse",
+  maxWidth: "800px",
+  border: "1px solid black",
+  width: "100%",
+  margin: "20px auto",
+  textAlign: "center",
+});
 
 const thead = document.createElement("thead");
 const tbody = document.createElement("tbody");
